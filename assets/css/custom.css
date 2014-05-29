@@ -1,0 +1,11 @@
+/*______________________________________
+ 
+INDEX PAGE
+______________________________________*/
+.marketing {
+    margin-bottom: 50px;
+}
+
+.marketing .col-lg-4 p, .marketing .col-lg-4 ul {
+    text-align: left;
+}

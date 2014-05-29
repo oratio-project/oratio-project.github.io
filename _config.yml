@@ -1,0 +1,33 @@
+name: Oratio Project
+description: 
+
+url: "http://localhost:4000"
+
+paginate: 10
+
+markdown: rdiscount
+
+# translation tags
+t:
+  ita:
+    home:  "Home"
+    developer: "Sviluppatori"
+    demo : "Demo online"
+    use : "Usa online"
+    about: "About"
+    contact : "Contatti"
+    menu: "Menù principale"
+    account : "Conto clienti"
+    products : "Prodotti"
+    finance : "Finanza"
+  eng:
+    home:  "Home"
+    developer : "Developer"
+    demo: "Online demo"
+    use : "Online use"
+    about: "About"
+    contact : "Contact"
+    menu: "Main menu"
+    account : "Account receivable"
+    products : "Products"
+    finance : "Finance"
