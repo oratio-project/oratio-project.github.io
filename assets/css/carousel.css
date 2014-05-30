@@ -118,7 +118,7 @@ body {
 
 /* RESPONSIVE CSS
 -------------------------------------------------- */
-
+/*adapt img and carousel height to small screen*/
 @media (min-width: 768px) {
   .carousel {
     height: 400px;
