@@ -120,6 +120,12 @@ body {
 -------------------------------------------------- */
 
 @media (min-width: 768px) {
+  .carousel {
+    height: 400px;
+  }
+  .carousel .item {
+      height: 400px;
+  }
 
   /* Remove the edge padding needed for mobile */
   .marketing {

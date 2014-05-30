@@ -20,6 +20,7 @@ t:
     account : "Conto clienti"
     products : "Prodotti"
     finance : "Finanza"
+    language : "Lingua"
   eng:
     home:  "Home"
     developer : "Developer"
@@ -31,3 +32,4 @@ t:
     account : "Account receivable"
     products : "Products"
     finance : "Finance"
+    language : "Language"
