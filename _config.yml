@@ -22,6 +22,7 @@ t:
     finance : "Finanza"
     settings: "Impostazioni generali"
     language : "Lingua"
+    back_to_top : "Torna su"
   eng:
     home:  "Home"
     developer : "Developer"
@@ -35,3 +36,4 @@ t:
     finance : "Finance"
     settings: "General settings"
     language : "Language"
+    back_to_top : "Back to top"
