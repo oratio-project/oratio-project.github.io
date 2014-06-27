@@ -9,7 +9,28 @@ ______________________________________*/
 .marketing .col-lg-4 p, .marketing .col-lg-4 ul {
     text-align: left;
 }
+/* 
+    side nav bar style
+---------------------------------*/
+#install-side-navbar{
+    position:fixed;
+    width: 12%;
+}
 
+li.list-group-item.active a{
+    color: white;
+}
+/*
+    code snippet style 
+---------------------------------*/
+
+.code{
+    background-color: #d6d6d6;
+    margin: 10px;
+    padding:10px;
+    font-family: monospace;
+    border:#080808 dashed thin;
+}
 /*_____________________________________
 
 FOOTER

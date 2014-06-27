@@ -1,0 +1,307 @@
+---
+title: Installazione
+layout: default
+lang: ita
+active: install
+---
+<div class="container">
+    <div class="row"> 
+        <div class="col-lg-3 col-md-3">
+            {% include install-side-navbar.html %}
+        </div>
+        <div class="col-lg-9 col-md-3">
+            <section id="requirements">
+                <div class="page-header">
+                    <h2>{{site.t[page.lang].requirements}}</h2>
+                </div>
+                <p>Oratio® è un programma di gestione integrata ERP distribuito con licenza GPL. Il programma si appoggia su database PostgreSQL e funziona in modalità WEB, vale a dire che è accessibile tramite un programma per la navigazione in Internet (browser). Per questo, prima di poter utilizzare Oratio® è necessario assicurarsi che gli strumenti utilizzati da quest'ultimo siano presenti sul server su cui verrà installato Oratio®. </p>
+                <p>Questa guida fa riferimento all'intallazione di Oratio® sul sistema operativo completamente gratuito: Debian Linux (a partire dalla versione etch).</p> 
+                <p>L'installazione di Oratio®  è possibile su praticamente ogni Sistema Operativo Unix o Linux con qualche piccola modifica. Per l'installazione su Windows occorre seguire un altra guida (under-construction).</p>
+                <p>Elenco dei programmi necessari:</p>
+                <ol>
+                    <li>Perl, versione 5 e+ (Perl)</li>
+                    <li>Un server http Apache</li>
+                    <li>Il sistema di gestione di base dati PostgreSQL, versione 8.4 +</li>
+                    <li>Le seguenti librerie Perl: DBD-Pg e DBI, reperibili sul <a href="http://www.cpan.org/">sito CPAN</a> .</li>
+                    <li>I seguenti moduli Perl reperibili sul <a href="http://wiki.oratio.it/confluence/pages/viewpage.action?pageId=1081396">sito CPAN</a>
+                        <ul>
+                            <li>XML::Parser</li>
+                            <li>XML::Writer</li>
+                            <li>XML::Writer::String</li>
+                            <li>XML::Encoding</li>
+                            <li>HTML::Template</li>
+                            <li>Text::Template</li>
+                            <li>CGI::Session</li>
+                            <li>Unicode::String</li>
+                            <li>PDF::API2</li>
+                            <li>Mail::Sender</li>
+                            <li>XML::SAX (opzionale)</li>
+                            <li>XML::Pastor (opzionale)</li>
+                            <li>XML::DOM (opzionale)</li>
+                            <li>Spreadsheet::WriteExcel</li>
+                            <li>Crypt::SaltedHash - per il supporto all'algoritmo sha384 con il sale</li>
+                            <li>Locale::Util - per il supporto all'internazionalizzazione delle pagine di autenticazione e cambio password (debian: libintl-perl)</li>
+                            <li>XML::Compile - per la creazione di file xml (Fattura Elettronica e RID)</li>
+                            <li>XML::LibXML - per la creazione di file xml (Fattura Elettronica e RID)</li>
+                        </ul>
+                        <p>Per le Stampe:</p>
+                        <ul>
+                            <li>Sun Java JDK versione 1.6</li>
+                            <li>Moduli "Inline" e "Inline-Java"</li>
+                            <li>JasperReports e librerie collegate (incluse nel download di Oratio®)</li>
+                            <li>Opzionale: iReport per creazione e modifica stampe in modalità grafica</li>
+                        </ul>
+                    </li>
+                </ol>
+                
+                
+            </section>
+            
+            <section id="installation">
+                <div class="page-header">
+                    <h2>{{site.t[page.lang].installation}}</h2>
+                </div>
+                
+                <h3>Installazione dei file</h3>
+                <p>Decomprimere il file oratio-xxx.tar.gz nella cartella /var/www del vostro server Linux:</p>
+                <div class="code">
+                    tar xzf oratio-x.x.x.tar.gz
+                </div>
+                <p>Troverete tutti i file installati nella cartella /var/www/oratio/</p>
+                <div class="code">
+                    ls /var/www/oratio/
+                </div>
+                
+                <h3>Configurazione di Apache</h3>
+                
+                <h4>Installazione</h4>
+                <div class="code">
+                    apt-get install apache2
+                </div>
+                
+                <h4>Configurazione</h4>
+                <p>Creare un file chiamato oratio.conf nella cartella di configurazione di Apache: /etc/apache2/conf.d/ nel quale deve essere riportato il seguente testo:</p>
+                <div class="code">
+                    Alias /oratio/ /var/www/oratio/<br>
+                    <Directory /var/www/oratio><br>
+                    AddHandler cgi-script .pl<br>
+                    Options ExecCGI Includes FollowSymlinks<br>
+                </Directory><br>
+                <Directory "/var/www/oratio/users"><br>
+                    Order Deny,Allow<br>
+                    Deny from All<br>
+                </Directory><br>
+                <Directory "/var/www/oratio/logs"><br>
+                    Order Deny,Allow<br>
+                    Deny from All<br>
+                </Directory>
+
+                </div>
+                
+                <p>Fare riferimento al <a href="http://www.apache.org/">sito di Apache</a> per eventuali problemi sulla configurazione.</p>
+                
+                <h4>Permessi sui file</h4>
+                <p>Assegnare la proprietà della cartella <b>/var/www/oratio</b>, in modo ricorsivo, all'utente e al gruppo di Apache: <b>www-data:www-data</b> (A seconda del sistema operativo il nome dell'utente e del gruppo possono variare).</p>
+                <p>Per fare ciò eseguire questo comando con i permessi adeguati (es. con i permessi dell utente di <b>root</b>)</p>
+                <div class="code">
+                    chown -R www-data:www-data /var/www/oratio
+                </div>
+                
+                <h4>Riavvio di Apache</h4>
+                <p>Per rendere effettive le modifiche apportate ad apache bisogna riavviarlo con il comando:</p>
+                <div class="code">
+                    apache2ctl restart
+                </div>
+                <p>Su versioni di Debian più recenti:</p>
+                <div class="code">
+                    service apache2 restart
+                </div>
+            </section>
+            
+            <section id="postgreSQL">
+                <div class="page-header">
+                    <h2>{{site.t[page.lang].postgreSQL}}</h2>
+                </div>
+                <p>Installare PostgreSQL con questo comando eseguito dall'utente root:</p>
+                <div class="code">
+                    apt-get install postgresql-8.1
+                </div>
+                <p>Su versoni di Debian più recenti la versione di Postgres può essere più aggiornata, per esempio <b>postgresql-8.4</b> per la Debian 6.0 "squeeze" e <b>postgresql-9.1</b> per la Debian 7.0 "wheezy".</p>
+                <p>Per l'installazione su altri sistemi operativi fare riferimento al <a href="http://www.postgresql.org/">sito di postgresql</a></p>
+                
+                <p>Per l'utilizzo di Oratio®, si consiglia di creare un utente specifico da utilizzare per l'accesso al database. Procedere dunque come segue:</p>
+                <ul>
+                    <li>Accedere alla shell di comando come utente "root" e successivamente accedere come utente "postgres"</li>
+                    <li>Creare un utente “oratio”. Importante: consentire all'utente la possibilità di creare database (a questo serve l'opzione “-d”). L'opzione “-P” richiede l'assegnazione di una password all'utente (opzionale ma consigliato!)
+                        <div class="code">
+                            su root <br>
+                            < Inserire la password dell'utente: "root" ><br>
+                            su postgres<br>
+                            createuser -d -P oratio<br>
+                            < Inserire la password per l'utente: "oratio" > [[PWD]]<br>
+                            < Inserirla nuovamente > [[PWD]]<br>
+                            < Rispondere 'n' alla domanda : "Shall the new user be allowed to create more new users? (y/n) n" ><br>
+                            < Rispondere 'y' all'eventuale domanda : "Shall the new user be allowed to create more dataset? (y/n) y" ><br>
+                            <! Questa domanda potrebbe non comparire se è stata inserita l'opzione “-d” in fase di creazione dell'utente. !><br>
+                        </div>
+                    </li>
+                </ul>
+            </section>
+            
+            <section id="perl">
+                <div class="page-header">
+                    <h2>{{site.t[page.lang].perl}}</h2>
+                </div>
+                <p>E' possibile che alcuni dei pacchetti necessari per il funzionamento di Oratio® siano già presenti sul vostro sistema.</p>
+                <p>Per l'installazione dei moduli Perl su Debian Linux utilizzare questo comando:</p>
+                <div class="code">
+                    apt-get -y install libdbi-perl libdbd-pg-perl libxml2 libxml-libxml-perl<br>
+                    apt-get -y install libxml-parser-perl libxml-writer-perl libunicode-string-perl<br>
+                    apt-get -y install libxml-encoding-perl libhtml-template-perl libtext-template-perl<br>
+                    apt-get -y install libcgi-session-perl libpdf-api2-perl libmail-sender-perl<br>
+                    apt-get -y install libintl-perl libcrypt-saltedhash-perl libspreadsheet-writeexcel-perl <br>
+                </div>
+                <p>L'installazione dei pacchetti può essere differente a seconda della distribuzione Linux utilizzata. Diversamente è possibile seguire la seguente procedura che funziona indipendentemente dalla distribuzione:</p>
+                <p>Come utente root accedere alla gestione dei moduli perl: "CPAN":</p>
+                <div class="code">
+                    su root<br>
+                    < Inserire la password dell'utente: "root" ><br>
+                    perl -MCPAN -eshell<br>
+                    < Se è la prima volta che viene eseguito questo comando, verranno poste alcune domande di configurazione><br>
+                    < in genere le scelte di default vanno bene, occorre solo fare attenzione a scegliere bene i server da cui scaricare>
+                </div>
+                <p>Una volta completata la configurazione verrà proposta una nuova shell di comando in cui sarà possibile digitare l'istruzione per l'installazione dei moduli:</p>
+                <div class="code">
+                    cpan> install XML::Parser<br>
+                    cpan> install XML::Writer<br>
+                    cpan> install XML::Writer::String<br>
+                    cpan> install XML::Encoding<br>
+                    cpan> install HTML::Template<br>
+                    cpan> install Text::Template<br>
+                    cpan> install CGI::Session<br>
+                    cpan> install Unicode::String<br>
+                    cpan> install PDF::API2<br>
+                    cpan> install Mail::Sender<br>
+                    cpan> install XML::SAX (opzionale)<br>
+                    cpan> install XML::LibXML (opzionale)<br>
+                    cpan> install XML::Pastor (opzionale)<br>
+                    cpan> install XML::DOM (opzionale)<br>
+                    cpan> install Spreadsheet::WriteExcel<br>
+                    cpan> install Crypt::SaltedHash<br>
+                    cpan> install Locale::Util<br>
+                    cpan> install Bundle::DBD::Pg
+                </div>
+            </section>
+            
+            <section id="jasper">
+                <div class="page-header">
+                    <h2>{{site.t[page.lang].jasper}}</h2>
+                </div>
+                <p>Le stampe generate da Oratio® sono state create utilizzando JasperReports e richiedono pertanto l'installazione di alcuni moduli aggiuntivi, in assenza dei quali non potrà essere eseguita alcuna stampa! Procede nel seguente modo:</p>
+                <ul>
+                    <li>Installare Sun Java JDK versione 1.5+ Software e istruzioni per l'installazione sono reperibili all’indirizzo <a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">http://java.sun.com/javase/downloads/index.jsp</a></li>
+                    <li>Installare i moduli "Inline" e "Inline-Java" reperibili rispettivamente ai seguenti indirizzi: <a href="http://search.cpan.org/~ingy/Inline-0.44/Inline.pod">http://search.cpan.org/~ingy/Inline-0.44/Inline.pod</a> <a href="http://search.cpan.org/~patl/Inline-Java-0.52/Java.pod">http://search.cpan.org/~patl/Inline-Java-0.52/Java.pod</a></li>
+                    <li>In alternativa è possibile effettuare l'installazione utilizzando lo stesso metodo riportato alla sezione “Installazione moduli Perl”: come utente root accedere alla gestione dei moduli perl: "CPAN":
+                        <div class="code">
+                            su root <br>
+                            < Inserire la password dell'utente: "root" ><br>
+                            perl -MCPAN -eshell<br>
+                            cpan> install Inline
+                        </div>
+                        <p>Una volta completata l'installazione del primo modulo, procedere con il successivo</p>
+                        <div class="code">
+                            cpan> install Inline::Java
+                        </div>
+                    </li>
+                    <li>Copiare i file presenti nella cartella “jasperreport/italian” nella precedente cartella “jasperreport.”</li>
+                    <li>Assegnare alla cartella jasperrerport e ai suoi files tutti i permessi
+                        <div class="code">
+                            cp /var/www/oratio/jasperreport/italian/* /var/www/oratio/jasperreport<br>
+                            chmod -R 777 /var/www/oratio/jasperreport/<br>
+                        </div>
+                    </li>
+                    <li>Opzionale: Installare iReport per creare stampe JasperReports in modalità grafica (<a href="http://www.jasperforge.org/sf/projects/ireport">http://www.jasperforge.org/sf/projects/ireport</a>)</li>
+                </ul>
+                <h3>Update per versioni recenti di Debian (6.0 "squeeze" e 7.0 "wheezy")</h3>
+                <p>Per le versioni recenti di Debian, dalla 6.0, la procedura di installazione è leggermente differente. La versione di Sun del JDK non è più disponibile a seguito dell'acquisizione da parte di Oracle. Va installato quindi il JDK Oracle, versione 7.0 o superiore.</p>
+                <div class="code">
+                    echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu precise main" > /etc/apt/sources.list.d/webupd8team-java.list<br>
+                    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys C2518248EEA14886<br>
+                    apt-get update<br>
+                    apt-get install oracle-java7-installer
+                </div>
+                <p>La libinline di Perl è disponibile per le distribuzioni Debian 6.0 e 7.0, mentre non lo è la <b>libinline::java</b>. Un metodo pulito per evitare di installare da CPAN (e, di conseguenza, di installare anche l'ambiente di sviluppo e di compilare, nonché di installare software fuori dal gestore dei pacchetti) è installare il pacchetto <a href="https://packages.debian.org/jessie/libinline-java-perl">libinline-java-perl della Debian "jessie"</a>. Bisogna scegliere un pacchetto adeguato all'architettura del proprio server; nell'esempio a seguire viene installata la versione i386:</p>
+                <div class="code">
+                    apt-get install libinline-perl<br>
+                    wget http://ftp.us.debian.org/debian/pool/main/libi/libinline-java-perl/libinline-java-perl_0.53-1_i386.deb<br>
+                    dpkg -i libinline-java-perl_0.53-1_i386.deb
+                </div>
+            </section>
+            
+            <section id="config">
+                <div class="page-header">
+                    <h2>{{site.t[page.lang].config}}</h2>
+                </div>
+                <ul>
+                    <li>Aprire un browser internet e chiamare l'indirizzo <a href="http://localhost/oratio/setup.pl">http://localhost/oratio/setup.pl</a> Sostituire eventualmente localhost con l'indirizzo/nome del server su cui è installato Oratio®</li>
+                    <li>Assicurarsi che tutti i moduli richiesti siano correttamente installati</li>
+                    <li>Procedere con la creazione (è possibile forzare la creazione tenendo presente che l'assenza di eventuali moduli non potrà garantire un corretto funzionamento del software)</li>
+                    <li>Inserire dunque i parametri per la creazione del database che dovrà contenere gli utenti dell'applicazione:
+                        <ul>
+                            <li>Template --> default template1</li>
+                            <li>Dataset --> oratio_db_utenti (nome da assegnare al database utenti)</li>
+                            <li>User --> oratio (utente per l'accesso al database)</li>
+                            <li>Host --> default localhost (o nome/indirizzo del server del database)</li>
+                            <li>Port --> default 5432 (porta associata al servizio Postgrsql)</li>
+                            <li>Password --> [[PWD]] (password dell'utente che accede al database)</li>
+                        </ul>
+                    </li>
+                    <li>Inserire i dati per la creazione dell'utente amministratore di Oratio e salvare</li>
+                    <li>Accedere all'applicazione all'indirizzo <a href="http://localhost/oratio/index.pl">http://localhost/oratio/index.pl</a> con l'utente amministratore appena creato</li>
+                    <li>Accedere alla voce di menu “Admin” per accedere alla pagina di amministrazione principale</li>
+                    <li>Selezionare la voce “Crea nuovo database” e compilare i dati richiesti
+                        <ul>
+                            <li>Utente Db --> oratio (utente per l'accesso al database)</li>
+                            <li>Password Db --> [[PWD]] (password dell'utente che accede al database)</li>
+                            <li>Host --> default localhost (o nome/indirizzo del server del database)</li>
+                            <li>Porta --> default 5432</li>
+                            <li>Template --> default template1</li>
+                            <li>Nome --> oratio_db_dati (nome da assegnare al database dei dati)</li>
+                        </ul>
+                    </li>
+                    <li>Selezionare la voce "Aggiungi Gruppo", assegnare un nome al gruppo e deselezionare le eventuali voci di menu cui non si vuole consentire l'accesso</li>
+                    <li>Selezionare la voce “Aggiungi Utente”, compilare i campi proposti e salvare</li>
+                    <li>Selezionare la voce “Aggiungi Connessione Database” e inserire i dati richiesti:
+                        <ul>
+                            <li>Nome --> connessione1 (nome da assegnare alla connessione)</li>
+                            <li>Utente --> oratio (utente del database creato al punto “Installazione e configurazione della base di dati PostgresSQL”)</li>
+                            <li>Password --> [[PWD]] (la password assegnata all'utente oratio)</li>
+                            <li>Dataset --> oratio_db_dati (inserire il nome del database dei dati creato al punto precedente)</li>
+                            <li>Host --> default localhost (o nome/indirizzo del server del database)</li>
+                            <li>Port --> generalmente 5432</li>
+                        </ul>
+                    </li>
+                    <li>Nella sezione “Elenco utenti” selezionare l'utente creato in precedenza, selezionare la connessione desiderata, l'opzione default per consentire l'accesso diretto a quel database e assegnare il gruppo.</li>
+                </ul>
+            </section>
+                
+            
+            <section id="access">
+                <div class="page-header">
+                    <h2>{{site.t[page.lang].access}}</h2>
+                </div>
+                <ul>
+                    <li>
+                        Richiamare nuovamente la pagina <a href="http://localhost/oratio/index.pl">http://localhost/oratio/index.pl</a>. Sostituire eventualmente localhost con l'indirizzo/nome del server su cui é installato Oratio®
+                    </li>
+                    <li>Inserire utente e password creati al punto precedente.</li>
+                    <li>Premere login</li>
+                </ul>
+                
+                <p>Congratulazioni, avete installato il vostro ERP Open Source, Oratio®!<br>
+                    © 2007 Proxima Centauri srl & Omega Centauri sarl info@oratio.it</p>
+            </section>
+        
+        </div>
+    </div>
+</div>
