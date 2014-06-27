@@ -9,3 +9,18 @@ ______________________________________*/
 .marketing .col-lg-4 p, .marketing .col-lg-4 ul {
     text-align: left;
 }
+
+/*_____________________________________
+
+FOOTER
+______________________________________*/
+footer p{
+    line-height: 50px;
+}
+
+.footer-navbar{
+    margin-bottom: 0px !important;
+    padding: 0px;
+    position: absolute;
+    width: 100%;
+}
