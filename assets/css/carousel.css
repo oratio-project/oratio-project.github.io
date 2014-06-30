@@ -55,6 +55,10 @@ body {
     border-color: black !important;
 }
 
+.carousel-indicators li.active {
+    background-color: black !important;
+}
+
 /* Declare heights because of positioning of img element */
 .carousel .item {
   height: 400px;
