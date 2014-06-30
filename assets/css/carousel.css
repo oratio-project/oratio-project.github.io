@@ -51,8 +51,8 @@ body {
 	padding-right: 15%;
 }
 
-.carousel-indicators {
-    color: black;
+.carousel-indicators li {
+    border-color: black !important;
 }
 
 /* Declare heights because of positioning of img element */
